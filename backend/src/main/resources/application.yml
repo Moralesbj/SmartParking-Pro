@@ -1,0 +1,72 @@
+spring:
+  application:
+    name: smartparking-pro
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/smartparking}
+    username: ${DB_USER:smartparking}
+    password: ${DB_PASSWORD:}
+  flyway:
+    enabled: true
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 6MB
+  threads:
+    virtual:
+      enabled: true
+server:
+  port: ${SERVER_PORT:8080}
+  forward-headers-strategy: framework
+  error:
+    include-message: never
+    include-stacktrace: never
+  servlet:
+    session:
+      timeout: 30m
+      cookie:
+        name: SPSESSION
+        http-only: true
+        secure: ${COOKIE_SECURE:true}
+        same-site: strict
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
+      probes:
+        enabled: true
+springdoc:
+  api-docs:
+    enabled: ${API_DOCS_ENABLED:true}
+    path: /api/v1/openapi
+  swagger-ui:
+    path: /api/v1/docs
+app:
+  public-url: ${APP_PUBLIC_URL:http://localhost:5173}
+  security:
+    # AES-256-GCM key (base64, 32 bytes). Required for MFA enrollment.
+    encryption-key: ${APP_ENCRYPTION_KEY:}
+    # Two-step verification (TOTP). Off by default: login asks only for e-mail and password.
+    # Setting MFA_ENABLED=true restores enrollment, the second step and (with REQUIRE_MFA_PRIVILEGED) the admin requirement.
+    mfa-enabled: ${MFA_ENABLED:false}
+    require-mfa-privileged: ${REQUIRE_MFA_PRIVILEGED:true}
+  cors:
+    # Comma separated, exact origins only. Empty means same-origin only (served behind the proxy).
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:}
+  bootstrap:
+    email: ${BOOTSTRAP_EMAIL:}
+    password: ${BOOTSTRAP_PASSWORD:}
+  jobs:
+    enabled: ${JOBS_ENABLED:true}
+  alpr:
+    # SIMULATOR (default) or HTTP. HTTP calls ai-service; the result is always a suggestion.
+    mode: ${ALPR_MODE:SIMULATOR}
+    base-url: ${ALPR_BASE_URL:http://localhost:8000}
+    service-token: ${ALPR_SERVICE_TOKEN:}
+    auto-accept-confidence: ${ALPR_AUTO_ACCEPT:0.90}
+  mail:
+    # Real e-mail delivery is disabled until a provider is configured.
+    mode: ${MAIL_MODE:DISABLED}

@@ -1,0 +1,8 @@
+# Stored normalized (LF). Scripts and Dockerfiles keep LF on checkout so containers and CI run them on any OS.
+* text=auto
+*.sh text eol=lf
+mvnw text eol=lf
+Dockerfile text eol=lf
+*.cmd text eol=crlf
+*.png binary
+*.jpg binary
