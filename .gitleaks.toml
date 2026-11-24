@@ -1,0 +1,14 @@
+# Gitleaks configuration: all default rules stay active.
+# Automated tests contain only invented credentials (e.g. a wrong password to test rejection), so their folders
+# are allowlisted. Real secrets never live in the repository: they come from environment variables (.env.example).
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Invented credentials used only by automated tests"
+paths = [
+  '''^backend/src/test/''',
+  '''^ai-service/tests/''',
+  '''^frontend/src/.*/__tests__/''',
+  '''^frontend/tests/''',
+]
