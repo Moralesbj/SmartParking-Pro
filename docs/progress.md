@@ -1,5 +1,12 @@
 # Progreso
 
+## Publicación — 2026-11-24
+Repositorio público https://github.com/Moralesbj/SmartParking-Pro (rama `main`). Primer CI en GitHub: corregidos permisos de
+ejecución de `mvnw`/scripts, `trivy-action` fijado por commit (v0.36.0, posterior al ataque de marzo de 2026), `.gitleaks.toml`
+(excepción solo para credenciales inventadas de pruebas) y dependencias del frontend sin vulnerabilidades conocidas
+(react-router-dom 7.18.5, zod 4.6.7, vite 7.3.7, vitest 4.1.12; `npm run test` usa `scripts/vitest.mjs` por un fallo de Vitest 4
+en Windows con la unidad en minúscula). Resultado: `CI` y `Security` en verde.
+
 ## Cambio posterior — 2026-11-23: verificación en dos pasos desactivada
 
 A pedido del propietario: `app.security.mfa-enabled` (`MFA_ENABLED`, por defecto `false`) apaga el segundo factor. El ingreso
@@ -19,7 +26,8 @@ Verificado en Windows 11, JDK 25.0.5, Node 26.13.1, sin Docker (PostgreSQL 18 em
 | `python infrastructure/scripts/seed/seed_local.py http://localhost:5173 <cred.json>` | 111/111 verificaciones por API contra la app en vivo |
 | `E2E_CHANNEL=msedge SP_CREDENTIALS=<cred.json> npx playwright test` | 6/6 (5 roles por todas las pantallas + flujo de caja: entrada sin cupo, QR, liquidación, cobro, salida) |
 | `cd ai-service && python -m pytest` | no se tocó en esta sesión (24 pruebas en la sesión anterior) |
-| `docker compose … up` / CI de GitHub | **No ejecutado** (sin Docker ni push) |
+| GitHub Actions `CI` y `Security` (commit 624dc05) | OK: backend con Testcontainers (PostgreSQL real), frontend, ai-service, construcción de las 3 imágenes Docker, Trivy (crítico), npm audit, gitleaks |
+| `docker compose … up` | **No ejecutado** (sin Docker en el equipo local) |
 
 Cambios: migración V5 (4 categorías, `vehicle_rates` + plantilla + versiones, snapshot por estancia, código de tiquete, descuentos,
 planes por categoría con horario/gracia/sedes), `ParkingRateService`, consulta de tiquete, pantallas "Tarifas por vehículo" y
@@ -44,7 +52,7 @@ la especificación define una sola tarifa por minuto por categoría y prohíbe r
 3. M17 dashboard por rol, XLSX/PDF, consolidado multisede · M18 valores anteriores/nuevos redactados en auditoría.
 4. M19 registro/invitación de clientes · M20 numeración de tickets, branding.
 5. M04 historial/retención · M05 otros países · `docs/acceptance-matrix.md` aún no redactado.
-6. Ejecutar Compose y CI donde haya Docker; integrar el E2E de Playwright (ya existe, local) en CI con una pila sembrada.
+6. Ejecutar Compose donde haya Docker; integrar el E2E de Playwright (ya existe, local) en CI con una pila sembrada.
 7. Proveedores (DIAN, pasarela, correo/SMS): bloqueados hasta tener cuentas y credenciales.
 
 Siguiente comando: `cd backend && ./mvnw test`.
